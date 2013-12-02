@@ -1,0 +1,256 @@
+''********************************************
+''*  VGA 512x384 2-Color Bitmap Driver v1.0  *
+''*  Author: Chip Gracey                     *
+''*  Copyright (c) 2006 Parallax, Inc.       *
+''*  See end of file for terms of use.       *
+''********************************************
+
+CON
+
+  _clkmode = xtal1 + pll16x
+  _xinfreq = 5_000_000
+
+  tiles    = vga#xtiles * vga#ytiles
+  tiles32  = tiles * 32
+
+
+OBJ
+
+  vga : "VGA_Driver"
+  f: "FloatMath"
+  'pst : "Parallax Serial Terminal"
+
+
+VAR
+
+  long  sync, pixels[tiles32]
+  word  colors[tiles]
+
+
+
+PUB start | h, i, j, k, x, y, basePin , c, d, e, center, tipY, arrowY, arrowX
+
+  'start vga
+  basePin := 0
+  vga.start(basePin, @colors, @pixels, @sync)
+  'pst.start(115200)
+
+  'init colors to cyan on blue
+  repeat i from 0 to tiles - 1
+    'colors[i] := $2804
+    '$FGBG
+    colors[i] := $3814
+
+
+
+  {'draw some lines
+  repeat y from 1 to 8
+    repeat x from 0 to 511
+      plot(x, x/y)
+      '}
+
+  'wait ten seconds
+  'waitcnt(clkfreq * 10 + cnt)
+
+  center := 256
+  tipY := 100
+
+
+  {'
+  repeat c from 100 to 200
+    e:=220
+    plot (e+20, c)
+    plot (e+25, c)
+
+  repeat d from 0 to 25
+      plot (e+d, 100-d)
+      plot (e+25+d, 75 +d)
+
+  '}
+
+
+  {'randomize the colors and pixels
+  repeat y from 1 to 8
+    repeat x from 1 to 511
+      plot(x, x/y)
+
+  repeat
+    colors[||?h // tiles] := ?i
+    repeat 100
+      pixels[||?j // tiles32] := k?
+    '}
+
+    'triangle(220, 150, 255,100, 290, 150)
+    'plot(255, 101)
+
+PUB plot(x,y) | i
+
+  if x => 0 and x < 512 and y => 0 and y < 384
+    pixels[y << 4 + x >> 5] |= |< x
+
+PUB line(x1, y1, x2, y2) | i, leftX, rightX, leftY, rightY, slope, x , m,q , dx, p , y
+' This function draws a line from (x1, y1) to (x2,y2)
+  'long fx1, fx2, fy1, fy2
+  'Determine the left and right X coordinates
+
+  if x2 < x1
+    leftX := x2
+    rightX:= x1
+    leftY :=y2
+    rightY:=y1
+
+    {'
+    if y1 < y2
+      leftY := y1
+      rightY :=y2
+    else
+      leftY := y2
+      rightY :=y1
+    '}
+
+  else
+    leftX := x1
+    rightX := x2
+    leftY := y1
+    rightY:= y2
+
+    {'
+    if y1 < y2
+      leftY := y1
+      rightY :=y2
+    else
+      leftY := y2
+      rightY :=y1
+      '}
+
+
+
+  ' Draw lines
+  if leftX == rightX                                     'If the line is vertical
+    repeat i from leftY to rightY                        'No slope
+      plot( leftX, i)
+
+  elseif leftY == rightY
+    repeat i from leftX to rightX
+      plot(i, leftY)
+
+  else
+  ' y=mx+b
+
+    'm := f.FDiv((y2-y1),(x2-x1))
+
+    m:= f.FDiv(f.Ffloat(rightY-leftY), f.Ffloat(rightX-leftX))
+
+    if f.FAbs(m) <f.FFloat(1)
+      plot(5, 5)
+      'more variance in x
+      repeat x from leftX to rightX
+        dx := x-leftX
+        q := f.FMul(dx, m)
+        p := q+leftY
+        plot(x, p)
+      if m < 0
+        plot( 5,300)
+        repeat x from leftX to rightX
+          dx := x-leftX
+          q := f.FMul(dx, m)
+          p := f.FAdd(leftY,q)
+          plot(x, p)
+
+    else
+      plot(500,5)
+      ' more variance in Y
+      if m < 0
+        plot(500,200)
+        m:=f.FDiv((rightX-leftX), (rightY-leftY))
+        repeat y from rightY to leftY
+          dx := rightY-y
+          q := f.FMul(dx, m)
+          p := q+rightX
+          plot(p, y)
+      {'
+        repeat x from rightY to leftY
+          dx := x-rightY
+          q := f.FDiv(dx, m)
+          p := q- rightX
+          plot(q, x)
+          '}
+      else
+        repeat x from leftY to rightY
+          dx := x-leftY
+          q := f.FDiv(dx, m)
+          p := q+leftX
+          plot(p, x)
+
+
+
+  'm := f.FMul(m,10)
+  'return f.FRound(m)
+
+  {'
+    slope:= (rightY-leftY)/(rightX-leftX)                'Else calculate slope and draw over x
+
+    if ||(rightY-leftY) > ||(rightX-leftX)              ' if more variance in Y
+                                                        ' Draw in Y
+        repeat i from leftY to rightY
+          x :=leftX + i *
+          plot(x,i)
+  '}
+
+
+    {'
+    slope:= (leftY-rightY)/(leftX-rightX)
+    if (||slope < 1)                                        ' if slope if less than one, iterate through X
+      repeat i from leftX to rightX
+       plot( i, leftY+ ((i-leftX) * slope))
+    else                                                ' If slope if greater than one, iterate though Y
+      repeat i from leftY to rightY
+
+        plot(leftX + ((i - leftY) /slope ), i)
+        '}
+
+PUB rect(cx1, cy1, cx2, cy2)
+  ' Draws a rectangle with one corner at (cx1, cy1)
+  ' and the opposite corner at (cx2, cy2)
+  ' Returns: Nothing
+  line (cx1, cy1, cx2, cy1)                             'Top Left to top Right
+  line (cx2, cy1, cx2, cy2)                             'Top Right to bottom right
+  line (cx2, cy2, cx1, cy2)                             'Bottom Right to Bottom Left
+  line (cx1, cy2, cx1, cy1)                             'Bottom Left to Top Left
+
+PRI centRect(centerX, centerY, width, height) | cx1, cy1, cx2, cy2
+    'Draws a rectangle centered at (x,y) with specified width and height
+    'Returns: Nothing
+
+    cx1 := centerX - width/2                            ' Top Left X
+    cy1 := centerY - height/2                           ' Top Left Y
+    cx2 := centerX + width/2                            ' Bottom Right X
+    cy2 := centerY + height/2                           ' Bottom Right Y
+
+    rect(cx1, cy1, cx2, cy2)
+
+
+PUB triangle( x1, y1, x2, y2, x3, y3)
+  'Draws a trangle defined by three vertices
+  line(x1, y1, x2, y2)
+  line(x2, y2, x3, y3)
+  line(x3, y3, x1, y1)
+
+
+{{
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                   TERMS OF USE: MIT License                                                  │                                                            
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation    │ 
+│files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,    │
+│modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software│
+│is furnished to do so, subject to the following conditions:                                                                   │
+│                                                                                                                              │
+│The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.│
+│                                                                                                                              │
+│THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE          │
+│WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR         │
+│COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,   │
+│ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                         │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+}}    
