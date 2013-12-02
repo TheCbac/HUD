@@ -64,7 +64,16 @@ PUB main | hold, m
 
 
         draw.triangle(50, 50, 300, 200, 200, 25)
+      "y":
+        draw.triangle(37,40, 89, 60, 300, 300)
 
+      "u":
+        draw.line(30,200, 60,100)
+      "m":
+        draw.rect(200,150,300,400)
+      "n":
+        draw.CentRect(256, 230, 40, 120)
+        draw.triangle(256, 100, 190 , 170 , 322 , 170)
 
 
 
