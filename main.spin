@@ -38,6 +38,8 @@ OBJ
         VGA_Driver
   '}
 
+  'font: "BlockFont"
+
 VAR
   byte state
 
