@@ -18,7 +18,8 @@ OBJ
 
   '##### Library that communicates with the bluetooth dongle ########
   'blue :"BlueTooth01"
-  serial : "FASTSERIAL-080927"
+  'serial : "FASTSERIAL-080927"
+  serial : "FullDuplexSerial"
   {'
   blue
     |
@@ -42,12 +43,13 @@ OBJ
 
 VAR
   byte state
+  byte name[20]
 
 
 
 
 
-PUB main | hold, m , thick , s
+PUB main | hold, m , thick , s, txWidth, txHeight, idle, ch, i,j
 
   dira[0] := 1
   serial.start(rxpin, txpin, mode, baud)
@@ -78,12 +80,26 @@ PUB main | hold, m , thick , s
       "l" :
           draw.circle(200, 200, 50)
 
+      "a":
 
+        draw.text("a",100,100)
       "y":
           draw.arc(300,200, 50, 5, 175)
 
       "u":
-        draw.line(30,200, 60,100)
+        idle:=0
+        i:=0
+        longfill(@name[0], 0, 25)                       ' clear buffer
+        repeat until idle == "p"                        '
+          idle := Serial.rxtime(30)
+          if idle > 0 and idle<> "p"
+            name[i]:= idle
+            i++
+        repeat j from 0 to i
+          draw.text(name[j],100+j*20, 100)
+          'draw.text("l", 100,100)
+
+
       "m":
         draw.rect(200,150,300,400)
       "n":

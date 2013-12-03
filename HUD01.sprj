@@ -4,7 +4,7 @@ Iamthemagicnumber=1
 [Main]
 SelectedTab=0
 TreePath=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth
-NumSubs=4
+NumSubs=5
 OverrideOptimisation=0
 OptimiseFlags=0
 SearchPath=/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth,/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/VGA,/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/Parallax Serial Terminal,/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/FloatMath
@@ -15,16 +15,16 @@ TopLine=53
 
 [File2]
 FileName=/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/VGA/VGA_Draw_Craig01.spin
-TopLine=214
+TopLine=378
 
 [File3]
 FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/VGA/VGA_Driver.spin
-TopLine=36
+TopLine=1
 
 [File4]
 FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth/FASTSERIAL-080927.spin
-TopLine=43
+TopLine=291
 
 [File5]
-FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/VGA/VGA_Driver.spin
-TopLine=82
+FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth/FullDuplexSerial.spin
+TopLine=4
