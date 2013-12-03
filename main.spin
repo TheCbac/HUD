@@ -17,7 +17,8 @@ CON
 OBJ
 
   '##### Library that communicates with the bluetooth dongle ########
-  blue :"BlueTooth01"
+  'blue :"BlueTooth01"
+  serial : "FASTSERIAL-080927"
   {'
   blue
     |
@@ -37,33 +38,41 @@ OBJ
         VGA_Driver
   '}
 
+VAR
+  byte state
 
 
 
-PUB main | hold, m
+
+
+PUB main | hold, m , thick , s
 
   dira[0] := 1
-  blue.start(rxpin, txpin, mode, baud)
+  serial.start(rxpin, txpin, mode, baud)
   draw.start
-
-
+  state := 0
+  's[4]:= "zdds"
 
 
   repeat
      'blue.echo
 
 '{'
-    hold:= blue.receive(30)     ' Wait for a byte to be received
-    blue.transmit(hold)         ' Echo byte back
+    hold:= Serial.rxtime(30)    ' Wait for a byte to be received
+    serial.tx(hold)         ' Echo byte back
 
     case hold                   ' draw shape based on command
       "q": draw.rect(5,5,100,200)
       "w": draw.line(20,20,200, 25)
       "r": draw.line(5,5,100,100)
       "t":
+          'serial.str(@s)
+          repeat until thick>0
+            thick:= serial.rxtime(30)
+          serial.dec(thick-$30)
+          draw.thick(thick-$30)
+          thick:=0
 
-
-        draw.triangle(50, 50, 300, 200, 200, 25)
       "y":
         draw.triangle(37,40, 89, 60, 300, 300)
 
@@ -74,6 +83,10 @@ PUB main | hold, m
       "n":
         draw.CentRect(256, 230, 40, 120)
         draw.triangle(256, 100, 190 , 170 , 322 , 170)
+      "c":
+        draw.Clear
+      "s":
+
 
 
 

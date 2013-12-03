@@ -2,28 +2,28 @@
 Iamthemagicnumber=1
 
 [Main]
-SelectedTab=4
-TreePath=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/VGA
-NumSubs=5
+SelectedTab=0
+TreePath=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth
+NumSubs=4
 OverrideOptimisation=0
 OptimiseFlags=0
 SearchPath=/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth,/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/VGA,/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/Parallax Serial Terminal,/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/FloatMath
 
 [File1]
 FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/main.spin
-TopLine=36
+TopLine=46
 
 [File2]
 FileName=/Users/ccheney10/Dropbox/2.009/HUD/Parallax/CodeCraig/VGA/VGA_Draw_Craig01.spin
-TopLine=107
+TopLine=78
 
 [File3]
-FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/FloatMath/FloatMath.spin
-TopLine=1
+FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/VGA/VGA_Driver.spin
+TopLine=36
 
 [File4]
-FileName=/Users/ccheney10/Dropbox/2.009/HUD/Parallax/Demos/Float_Demo_-_Archive__Date_2008.02.27__Time_13.17/Float_Demo.spin
-TopLine=16
+FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/Bluetooth/FASTSERIAL-080927.spin
+TopLine=43
 
 [File5]
 FileName=/Users/ccheney10///Dropbox/2.009/HUD/Parallax/CodeCraig/VGA/VGA_Driver.spin

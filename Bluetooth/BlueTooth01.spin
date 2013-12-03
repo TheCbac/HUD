@@ -84,6 +84,9 @@ PUB receive(ms) : value
 
   value := serial.rxtime(ms)
 
+PUB dec (val)
+  serial.dec(val)
+
 
 
 
