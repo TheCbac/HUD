@@ -64,7 +64,7 @@ PUB main | hold, m , thick , s
     case hold                   ' draw shape based on command
       "q": draw.rect(5,5,100,200)
       "w": draw.line(20,20,200, 25)
-      "r": draw.line(5,5,100,100)
+      "r": Right
       "t":
           'serial.str(@s)
           repeat until thick>0
@@ -73,22 +73,40 @@ PUB main | hold, m , thick , s
           draw.thick(thick-$30)
           thick:=0
 
+      "l" :
+          draw.circle(200, 200, 50)
+
+
       "y":
-        draw.triangle(37,40, 89, 60, 300, 300)
+          draw.arc(300,200, 50, 5, 175)
 
       "u":
         draw.line(30,200, 60,100)
       "m":
         draw.rect(200,150,300,400)
       "n":
-        draw.CentRect(256, 230, 40, 120)
-        draw.triangle(256, 100, 190 , 170 , 322 , 170)
+          Straight
       "c":
         draw.Clear
       "s":
+        draw.Clear
+        draw.CentRect(256, 230, 40, 120)
+        draw.triangle(256, 80, 190 , 170 , 322 , 170)
 
 
 
+PUB Straight
+        draw.Blank
+        draw.CentRect(256, 230, 40, 120)
+        draw.triangle(256, 80, 190 , 170 , 322 , 170)
+        draw.Fill
+
+
+PUB Right
+    draw.Blank
+    draw.CentRect(256, 150, 120, 40)
+    draw.triangle(316, 80, 316, 220, 375, 150)
+    draw.Fill
 
 
 
